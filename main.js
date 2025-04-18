@@ -65,12 +65,22 @@ function receiveMoves(board, websocket) {
   });
 }
 
+function getWebSocketServer() {
+  if (window.location.host === "fireonboard700.github.io") {
+    return "wss://soviet-sean-fireonboard700-11c6f271.koyeb.app/";
+  } else if (window.location.host === "localhost:8000") {
+    return "ws://localhost:8001/";
+  } else {
+    throw new Error(`Unsupported host: ${window.location.host}`);
+  }
+}
+
 window.addEventListener("DOMContentLoaded", () => {
   // Initialize the UI.
   const board = document.querySelector(".board");
   createBoard(board);
   // Open the WebSocket connection and register event handlers.
-  const websocket = new WebSocket("ws://localhost:8001/");
+  const websocket = new WebSocket(getWebSocketServer());
 
   // Check if this is a spectator.
   const params = new URLSearchParams(window.location.search);
