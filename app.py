@@ -120,7 +120,12 @@ async def handler(websocket):
         await start(websocket)
 
 def health_check(connection, request):
-    if request.path in ("/", "/healthz"):
+    connection_header = request.headers.get("Connection", "").lower()
+    upgrade_header = request.headers.get("Upgrade", "").lower()
+
+    is_upgrade = "upgrade" in connection_header and upgrade_header == "websocket"
+
+    if not is_upgrade and request.path in ("/", "/healthz"):
         return connection.respond(http.HTTPStatus.OK, "OK\n")
 
 async def main():
