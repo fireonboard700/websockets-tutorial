@@ -120,7 +120,7 @@ async def handler(websocket):
         await start(websocket)
 
 def health_check(connection, request):
-    if request.path == "/healthz":
+    if request.path in ("/", "/healthz"):
         return connection.respond(http.HTTPStatus.OK, "OK\n")
 
 async def main():
